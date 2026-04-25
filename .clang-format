@@ -1,0 +1,7 @@
+BasedOnStyle: Google
+ColumnLimit: 100
+Standard: Auto
+Language: C
+
+IndentPPDirectives: BeforeHash
+PointerAlignment: Right
