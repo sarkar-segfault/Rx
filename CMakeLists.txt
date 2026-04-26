@@ -28,3 +28,4 @@ target_include_directories(Rx PUBLIC Headers)
 
 target_compile_features(Rx PUBLIC c_std_99)
 
+target_link_libraries(Rx PRIVATE EGL GLESv2)
