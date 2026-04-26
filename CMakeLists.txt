@@ -8,7 +8,7 @@ project(
   DESCRIPTION "A rendering library for simpletons and wizards alike"
 )
 
-add_library(Rx)
+add_library(Rx Sources/Engine.c)
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(Rx PRIVATE Rx__Shared)
