@@ -1,6 +1,8 @@
 #include "Rx/Status.h" // IWYU pragma: associated
 
 const char *const RxStatus_Strings[RxStatus_Pass] = {
+  "called with invalid parameters",
   "failed to allocate object",
-  "called with invalid parameters"
+  "encountered graphics-related failure",
+  "could not satisfy device specification"
 };

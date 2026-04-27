@@ -8,7 +8,8 @@ project(
   DESCRIPTION "A rendering library for simpletons and wizards alike"
 )
 
-add_library(Rx Sources/Engine.c)
+option(Rx_Testing "Whether to build tests and enable CTest integration" OFF)
+add_library(Rx Sources/Engine.c Sources/Device.c Sources/Status.c)
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(Rx PRIVATE Rx__Shared)
@@ -29,3 +30,16 @@ target_include_directories(Rx PUBLIC Headers)
 target_compile_features(Rx PUBLIC c_std_99)
 
 target_link_libraries(Rx PRIVATE EGL GLESv2)
+
+if(Rx_Testing)
+  add_subdirectory(Vx)
+  
+  function(Rx_Test name)
+      add_executable(${name} Tests/${name}.c)
+      target_link_libraries(${name} PRIVATE Vx Rx)
+      add_test(NAME ${name} COMMAND ${name})
+  endfunction()
+
+  Rx_Test(Basic)
+  enable_testing()
+endif()

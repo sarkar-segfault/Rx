@@ -10,9 +10,9 @@ struct RxEngine {
 };
 
 RxStatus RxEngine_Create(RxEngine **engine, void *display) {
-  if (!display) return RxStatus_BadInput;
+  if (!engine || !display) return RxStatus_BadInput;
 
-  *engine = calloc(1, sizeof(struct RxEngine));
+  *engine = calloc(1, sizeof(RxEngine));
   if (!*engine) return RxStatus_AllocFailed;
 
   (*engine)->display = display;
