@@ -8,10 +8,12 @@ int main(void) {
   VxStatus vs;
   RxStatus rs;
 
-  Vx_DebugCheck(vs, Vx_Initiate());
+  VxContext context;
+
+  Vx_DebugCheck(vs, VxContext_Create(&context));
   VxWindow *window;
 
-  Vx_DebugCheck(vs, VxWindow_Create(&window, VxFlag_Visible));
+  Vx_DebugCheck(vs, VxWindow_Create(&window, context, VxFlag_Visible));
   VxEvent event;
 
   RxDevice *device;
@@ -102,6 +104,6 @@ terminate:
   Rx_DebugCheck(rs, RxDevice_Delete(&device));
 
   Vx_DebugCheck(vs, VxWindow_Delete(&window));
-  Vx_DebugCheck(vs, Vx_Terminate());
+  Vx_DebugCheck(vs, VxContext_Delete(&context));
   return 0;
 }
