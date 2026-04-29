@@ -32,8 +32,16 @@ target_compile_features(Rx PUBLIC c_std_99)
 target_link_libraries(Rx PRIVATE EGL GLESv2)
 
 if(Rx_Testing)
-  add_subdirectory(Vx)
-  
+  include(FetchContent)
+
+  FetchContent_Declare(
+    Vx
+    GIT_REPOSITORY https://github.com/sarkar-segfault/Vx.git
+    GIT_TAG main
+  )
+
+  FetchContent_MakeAvailable(Vx)
+
   function(Rx_Test name)
       add_executable(${name} Tests/${name}.c)
       target_link_libraries(${name} PRIVATE Vx Rx)

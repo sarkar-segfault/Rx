@@ -1,9 +1,0 @@
--IVx/Headers
--Wc++11-compat
--Wpedantic
--IHeaders
--std=c99
--lGLESv2
--Wextra
--lEGL
--Wall
