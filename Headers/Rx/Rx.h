@@ -5,7 +5,6 @@
 #include "Device.h"
 #include "Engine.h"
 #include "Status.h"
-
 // IWYU pragma: end_exports
 
 #endif

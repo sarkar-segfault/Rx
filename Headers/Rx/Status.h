@@ -12,9 +12,9 @@ typedef const char *RxStatus;
   #define RxStatus_Debug(s, v) s = v;
 #else
   #include <stdio.h>  // IWYU pragma: export
-  #define Rx_StatusDebug(s, v) \
+  #define RxStatus_Debug(s, v) \
     s = v;                     \
-    puts(RxStatus_Strings[s]);
+    puts(s);
 #endif
 
 #endif

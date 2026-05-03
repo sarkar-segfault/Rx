@@ -10,23 +10,23 @@ int main(void) {
 
   VxHandle handle;
 
-  Vx_DebugCheck(vs, VxHandle_Create(&handle));
+  VxStatus_Debug(vs, VxHandle_Create(&handle));
   VxWindow *window;
 
-  Vx_DebugCheck(vs, VxWindow_Create(&window, handle, VxFlag_Visible));
+  VxStatus_Debug(vs, VxWindow_Create(&window, handle, VxFlag_Visible));
   VxEvent event;
 
   RxDevice *device;
-  Rx_DebugCheck(rs, RxDevice_Create(&device, RxDeviceSpec_Default));
+  RxStatus_Debug(rs, RxDevice_Create(&device, RxDeviceSpec_Default));
 
   while (VxWindow_IsOpen(window)) {
-    Vx_DebugCheck(vs, VxWindow_PollEvents(window));
+    VxStatus_Debug(vs, VxWindow_PollEvents(window));
 
     while (VxWindow_PopEvent(window, &event)) {
       switch (event.type) {
         case VxEventType_Close:
           printf("Close\n");
-          Vx_DebugCheck(vs, VxWindow_Close(window));
+          VxStatus_Debug(vs, VxWindow_Close(window));
           goto terminate;
 
         case VxEventType_Resize:
@@ -101,9 +101,9 @@ int main(void) {
   }
 
 terminate:
-  Rx_DebugCheck(rs, RxDevice_Delete(&device));
+  RxStatus_Debug(rs, RxDevice_Delete(&device));
 
-  Vx_DebugCheck(vs, VxWindow_Delete(&window));
-  Vx_DebugCheck(vs, VxHandle_Delete(&handle));
+  VxStatus_Debug(vs, VxWindow_Delete(&window));
+  VxStatus_Debug(vs, VxHandle_Delete(&handle));
   return 0;
 }

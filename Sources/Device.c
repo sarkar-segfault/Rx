@@ -51,6 +51,11 @@ RxStatus RxDevice_Create(RxDevice **device, const RxDeviceSpec spec) {
   return RxStatus_Pass;
 }
 
-RxStatus RxDevice_GetSpec(const RxDevice *device, RxDeviceSpec *spec);
+RxStatus RxDevice_GetSpec(const RxDevice *device, RxDeviceSpec *spec) {
+  if (!device || !spec) return RxStatus_BadInput;
+
+  *spec = device->spec;
+  return RxStatus_Pass;
+}
 
 RxStatus RxDevice_Delete(RxDevice **device);
