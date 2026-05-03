@@ -4,7 +4,6 @@
 typedef const char *RxStatus;
 
 #define RxStatus_AllocFailed "(Rx) failed to allocate memory"
-#define RxStatus_NoEvents "(Rx) no events to pop from ring"
 #define RxStatus_BadInput "(Rx) called with bad arguments"
 #define RxStatus_Pass NULL
 

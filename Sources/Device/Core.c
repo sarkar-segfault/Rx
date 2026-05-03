@@ -4,7 +4,8 @@
 #include <vulkan/vulkan.h>
 
 #include "Rx/Status.h"
-#include "Status.h"
+#include "../Status.h"
+#include "Extra.h"
 
 struct RxDevice {
   VkInstance instance;
@@ -34,22 +35,18 @@ RxStatus RxDevice_Create(RxDevice **device, const RxDeviceSpec spec) {
 #endif
   };
 
-#ifndef NDEBUG
-  const char *layers[] = {"VK_LAYER_KHRONOS_validation"};
-#endif
-
   VkInstanceCreateInfo instinfo = {
       .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
       .pApplicationInfo = &appinfo,
       .ppEnabledExtensionNames = extensions,
       .enabledExtensionCount = sizeof(extensions) / sizeof(extensions[0]),
-#ifndef NDEBUG
-      .ppEnabledLayerNames = layers,
-      .enabledLayerCount = 1
-#else
-      .enabledLayerCount = 0
-#endif
   };
+
+  if (RxDevice_ValidationSupported()) {
+    const char *layers[] = {"VK_LAYER_KHRONOS_validation"};
+    instinfo.enabledLayerCount = sizeof(layers) / sizeof(layers[0]);
+    instinfo.ppEnabledLayerNames = layers;
+  }
 
   VkResult result = vkCreateInstance(&instinfo, NULL, &(*device)->instance);
   if (result != VK_SUCCESS) {

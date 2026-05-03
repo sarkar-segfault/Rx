@@ -5,4 +5,6 @@
 
 #define RxStatus_FromVk(r) string_VkResult(r)
 
+#define RxStatus_NoValidation "(Rx) validation layers not supported"
+
 #endif
