@@ -22,7 +22,7 @@ int main(void) {
   while (VxWindow_IsOpen(window)) {
     VxStatus_Debug(vs, VxWindow_PollEvents(window));
 
-    while (VxWindow_PopEvent(window, &event)) {
+    while (VxWindow_PopEvent(window, &event) == VxStatus_Pass) {
       switch (event.type) {
         case VxEventType_Close:
           printf("Close\n");

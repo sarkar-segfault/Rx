@@ -14,7 +14,7 @@ typedef const char *RxStatus;
   #include <stdio.h>  // IWYU pragma: export
   #define RxStatus_Debug(s, v) \
     s = v;                     \
-    puts(s);
+    if (s != RxStatus_Pass) puts(s);
 #endif
 
 #endif

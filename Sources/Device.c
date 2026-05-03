@@ -1,9 +1,10 @@
 #include "Rx/Device.h"  // IWYU pragma: associated
 
-#include <vulkan/vulkan.h>
 #include <stdlib.h>
+#include <vulkan/vulkan.h>
 
 #include "Rx/Status.h"
+#include "Status.h"
 
 struct RxDevice {
   VkInstance instance;
@@ -16,36 +17,44 @@ RxStatus RxDevice_Create(RxDevice **device, const RxDeviceSpec spec) {
   *device = calloc(1, sizeof(RxDevice));
   if (!*device) return RxStatus_AllocFailed;
 
+  (*device)->spec = spec;
+
   VkApplicationInfo appinfo = {
-    .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
-    .pApplicationName = spec.name ? spec.name : "Rx",
-    .applicationVersion = VK_MAKE_VERSION(spec.major, spec.minor, spec.micro),
-    .pEngineName = "Rx",
-    .engineVersion = VK_MAKE_VERSION(Rx_VersionMajor, Rx_VersionMinor, Rx_VersionMicro),
-    .apiVersion = VK_API_VERSION_1_0,
+      .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
+      .pApplicationName = spec.name ? spec.name : "Rx",
+      .applicationVersion = VK_MAKE_VERSION(spec.major, spec.minor, spec.micro),
+      .pEngineName = "Rx",
+      .engineVersion = VK_MAKE_VERSION(Rx_VersionMajor, Rx_VersionMinor, Rx_VersionMicro),
+      .apiVersion = VK_API_VERSION_1_0,
   };
 
-  const char *extensions[] = {
-    "VK_KHR_surface",
-    "VK_KHR_swapchain",
-    #ifdef _WIN32
-    "VK_KHR_win32_surface",
-    #endif
-    #ifndef NDEBUG
-    "VK_LAYER_KHRONOS_validation"
-    #endif
+  const char *extensions[] = {"VK_KHR_surface",
+#ifdef _WIN32
+                              "VK_KHR_win32_surface"
+#endif
   };
+
+#ifndef NDEBUG
+  const char *layers[] = {"VK_LAYER_KHRONOS_validation"};
+#endif
 
   VkInstanceCreateInfo instinfo = {
-    .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-    .pApplicationInfo = &appinfo,
-    .ppEnabledExtensionNames = extensions,
-    .enabledExtensionCount = sizeof(extensions) / sizeof(extensions[0])
+      .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+      .pApplicationInfo = &appinfo,
+      .ppEnabledExtensionNames = extensions,
+      .enabledExtensionCount = sizeof(extensions) / sizeof(extensions[0]),
+#ifndef NDEBUG
+      .ppEnabledLayerNames = layers,
+      .enabledLayerCount = 1
+#else
+      .enabledLayerCount = 0
+#endif
   };
 
-  if (vkCreateInstance(&instinfo, NULL, &(*device)->instance) != VK_SUCCESS) {
+  VkResult result = vkCreateInstance(&instinfo, NULL, &(*device)->instance);
+  if (result != VK_SUCCESS) {
     RxDevice_Delete(device);
-    return RxStatus_Pass;
+    return RxStatus_FromVk(result);
   }
 
   return RxStatus_Pass;
@@ -58,4 +67,12 @@ RxStatus RxDevice_GetSpec(const RxDevice *device, RxDeviceSpec *spec) {
   return RxStatus_Pass;
 }
 
-RxStatus RxDevice_Delete(RxDevice **device);
+RxStatus RxDevice_Delete(RxDevice **device) {
+  if (!device || !(*device)) return RxStatus_BadInput;
+  if ((*device)->instance) vkDestroyInstance((*device)->instance, NULL);
+
+  free(*device);
+  *device = NULL;
+
+  return RxStatus_Pass;
+}
