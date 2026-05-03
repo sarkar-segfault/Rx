@@ -1,16 +1,20 @@
 #ifndef Rx__StatusH
 #define Rx__StatusH
 
-#include "_Expose.h"
+typedef const char *RxStatus;
 
-typedef enum RxStatus {
-  RxStatus_BadInput,
-  RxStatus_AllocFailed,
-  RxStatus_GraphicsFail,
-  RxStatus_Unsatisfied,
-  RxStatus_Pass
-} RxStatus;
+#define RxStatus_AllocFailed "(Rx) failed to allocate memory"
+#define RxStatus_NoEvents "(Rx) no events to pop from ring"
+#define RxStatus_BadInput "(Rx) called with bad arguments"
+#define RxStatus_Pass NULL
 
-Rx__Expose const char *const RxStatus_Strings[RxStatus_Pass];
+#ifdef NDEBUG
+  #define RxStatus_Debug(s, v) s = v;
+#else
+  #include <stdio.h>  // IWYU pragma: export
+  #define Rx_StatusDebug(s, v) \
+    s = v;                     \
+    puts(RxStatus_Strings[s]);
+#endif
 
 #endif
