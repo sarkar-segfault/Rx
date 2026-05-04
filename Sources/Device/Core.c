@@ -42,7 +42,7 @@ RxStatus RxDevice_Create(RxDevice **device, const RxDeviceSpec spec) {
       .enabledExtensionCount = sizeof(extensions) / sizeof(extensions[0]),
   };
 
-  if (RxDevice_ValidationSupported()) {
+  if (RxDevice_ValidationSupported() == RxStatus_Pass) {
     const char *layers[] = {"VK_LAYER_KHRONOS_validation"};
     instinfo.enabledLayerCount = sizeof(layers) / sizeof(layers[0]);
     instinfo.ppEnabledLayerNames = layers;
