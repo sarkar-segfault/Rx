@@ -1,11 +1,10 @@
-#include "Rx/Device.h"  // IWYU pragma: associated
-
 #include <stdlib.h>
 #include <vulkan/vulkan.h>
 
-#include "Rx/Status.h"
 #include "../Status.h"
 #include "Extra.h"
+#include "Rx/Device.h"  // IWYU pragma: associated
+#include "Rx/Status.h"
 
 struct RxDevice {
   VkInstance instance;
@@ -66,10 +65,15 @@ RxStatus RxDevice_GetSpec(const RxDevice *device, RxDeviceSpec *spec) {
 
 RxStatus RxDevice_Delete(RxDevice **device) {
   if (!device || !(*device)) return RxStatus_BadInput;
-  if ((*device)->instance) vkDestroyInstance((*device)->instance, NULL);
+  RxStatus s = RxStatus_Pass;
+
+  if (!(*device)->instance) {
+    s = RxStatus_BadInput;
+  } else
+    vkDestroyInstance((*device)->instance, NULL);
 
   free(*device);
   *device = NULL;
 
-  return RxStatus_Pass;
+  return s;
 }

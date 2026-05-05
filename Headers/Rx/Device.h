@@ -14,7 +14,7 @@ typedef struct RxDeviceSpec {
   uint8_t major, minor, micro;
 } RxDeviceSpec;
 
-#define RxDeviceSpec_Default ((RxDeviceSpec){.name = "Rx"})
+#define RxDeviceSpec_Default ((RxDeviceSpec){0})
 
 Rx__Expose RxStatus RxDevice_Create(RxDevice **device, const RxDeviceSpec spec);
 

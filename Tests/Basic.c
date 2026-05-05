@@ -62,7 +62,7 @@ int main(void) {
           break;
 
         case VxEventType_KeyPress:
-          printf("Key press: %d (mod: %u)\n", event.info.press.key, event.info.press.mod);
+          printf("Key press: %d (mod: %u)\n", event.info.press.key, event.info.press.mods);
           break;
 
         case VxEventType_KeyRelease:
